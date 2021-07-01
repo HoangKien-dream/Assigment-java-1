@@ -11,7 +11,7 @@ public class Orders {
     private String iDOrder;
     private String customerName;
     private String product;
-    private String prices;
+    private int prices;
     private Date createAt;
     private int status;
 
@@ -25,33 +25,25 @@ public class Orders {
                 "",getDobString(), "",
                 "", getStatusName(), "");
     }
-    private String getDobString() {
+    public String getDobString() {
         return DateTimeUtil.formatDateToString(createAt);
     }
 
 
     private String getStatusName() {
-        return this.status == 1 ? "Active" :"Deactive";
+        return this.status == 1 ? "Paid" :"Not Paid";
     }
 
 
     public Orders() {
     }
 
-    public Orders(String iDOrder, String customerName, String product, String prices, Date createAt, int status) {
+    public Orders(String iDOrder, String customerName, String product, int prices) {
         this.iDOrder = iDOrder;
         this.customerName = customerName;
         this.product = product;
         this.prices = prices;
         this.createAt = Calendar.getInstance().getTime();
-        this.status = 1;
-    }
-    public Orders(String iDOrder, String customerName, String product, String prices, String strCreateAt, int status) {
-        this.iDOrder = iDOrder;
-        this.customerName = customerName;
-        this.product = product;
-        this.prices = prices;
-        this.createAt = DateTimeUtil.parseDateFromString(strCreateAt);
         this.status = 1;
     }
     public String getiDOrder() {
@@ -78,11 +70,11 @@ public class Orders {
         this.product = product;
     }
 
-    public String getPrices() {
+    public int getPrices() {
         return prices;
     }
 
-    public void setPrices(String prices) {
+    public void setPrices(int prices) {
         this.prices = prices;
     }
 

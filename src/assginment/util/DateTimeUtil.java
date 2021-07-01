@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateTimeUtil {
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-DD");
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public static Date parseDateFromString(String strDateTime) {
         try {

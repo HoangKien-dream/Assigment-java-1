@@ -7,7 +7,6 @@ import assginment.util.DateTimeUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
 public class OdersControllerImplement implements OrdersController {
@@ -21,19 +20,54 @@ public class OdersControllerImplement implements OrdersController {
 
     @Override
     public void addNewOrder() {
-        Orders orders = new Orders();
+        ArrayList<Orders> list = ordersModel.findAll();
         System.out.println("Please enter ID Orders: ");
         String idOrder = scanner.nextLine();
-        orders.setiDOrder(idOrder);
+        for (int i = 0; i < 5; i++) {
+            if (idOrder.length() < 4) {
+                System.out.println("Please enter ID with format (A001) : ");
+                idOrder = scanner.nextLine();
+                break;
+            }
+            for (int j = 0; i < list.size(); i++) {
+                if (idOrder.equals(list.get(i).getiDOrder())) {
+                    System.out.printf("%s ID order have exist", idOrder);
+                    System.out.println("Please enter ID another: ");
+                    idOrder=scanner.nextLine();
+                    break;
+                }
+            }
+        }
         System.out.println("Please enter nameCustomer: ");
         String nameCustomer = scanner.nextLine();
-        orders.setCustomerName(nameCustomer);
+        for (int i = 0; i < 5; i++) {
+            if (nameCustomer.length() < 4) {
+                System.out.println("Please enter your name at least 4: ");
+                nameCustomer = scanner.nextLine();
+                break;
+            }
+        }
         System.out.println("Please enter product: ");
         String product = scanner.nextLine();
-        orders.setProduct(product);
-        System.out.println("Please enter total prices: ");
-        String prices = scanner.nextLine();
-        orders.setPrices(prices);
+        for (int i = 0; i < 5; i++) {
+            if (product.length() < 4) {
+                System.out.println("Please enter product with format (1kg chicken,1kg rau,.....): ");
+                product = scanner.nextLine();
+                break;
+            }
+        }
+        System.out.println("Please enter  prices: ");
+        int prices = scanner.nextInt();
+        scanner.nextLine();
+        for (int i = 0; i < 5; i++) {
+            if (prices == 0) {
+                System.out.println("Please enter price of product : ");
+                prices = scanner.nextInt();
+                scanner.nextLine();
+                break;
+            }
+        }
+        Orders orders = new Orders(idOrder, nameCustomer, product, prices);
         if (ordersModel.save(orders)) {
             System.out.println("Action success!!");
         } else {
@@ -62,21 +96,24 @@ public class OdersControllerImplement implements OrdersController {
         System.out.println("Please enter endDate (yyyy-mm-DD),for example: 2001-10-29: ");
         String endDate = scanner.nextLine();
         Date endDob = DateTimeUtil.parseDateFromString(endDate);
-        ArrayList<Orders> date = ordersModel.findByTime(startDob,endDob);
-        if (date == null){
-            System.out.printf("Have no finished order from time %s to %s",startDate,endDate);
-        }else {
+        ArrayList<Orders> date = ordersModel.findByTime(startDob, endDob);
+        if (date.size() == 0) {
+            System.out.printf("Have no finished order from time %s to %s", startDate, endDate);
+        } else {
             System.out.printf("%10s%10s%10s | %10s%15s%10s | %5s%15s%5s | %5s%10s%5s | %5s%20s%5s | %5s%5s%5s |  \n",
                     "", "IdOrder", "",
                     "", "CustomerName", "",
                     "", "Product", "",
-                    "", "TotalPrices", "",
+                    "", "Prices", "",
                     "", "CreateAt", "",
                     "", "Status", "");
-            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+            System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n");
+            int total = 0;
             for (int i = 0; i < date.size(); i++) {
                 System.out.println(date.get(i).toString());
+                total += date.get(i).getPrices();
             }
+            System.out.printf("Total money: %d (VND)", total);
         }
 
     }
@@ -88,7 +125,7 @@ public class OdersControllerImplement implements OrdersController {
                 "", "IdOrder", "",
                 "", "CustomerName", "",
                 "", "Product", "",
-                "", "TotalPrices", "",
+                "", "Prices", "",
                 "", "CreateAt", "",
                 "", "Status", "");
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
